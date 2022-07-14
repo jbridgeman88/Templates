@@ -4,3 +4,11 @@
 
 *.~*
 ~*.*
+
+*.txt
+*.CMS
+*.FRM
+*.ZIP
+*.TMP
+*.OLD*
+*.WPD
