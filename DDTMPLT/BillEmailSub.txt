@@ -1,1 +1,0 @@
-{VIEW DATABASE DD_BILLING WHERE tran_uno IN (_BILL_UNO_LIST)}{IF ON_FIRST_VIEW_ROW()}Bill Document(s) Attached for {p_long_name}{END IF}{END VIEW}
