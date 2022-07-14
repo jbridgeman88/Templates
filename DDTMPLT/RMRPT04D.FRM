@@ -1,0 +1,56 @@
+Info=203,157,377,160,2905H
+Name="Records Management"
+Prompt="Client/Matter Report"
+ForeColor=0
+BackColor=C0C0C0H
+UsAc=7FFFH
+UsPm=3A16H
+UsCh=0
+Version=3
+ClientSize=367,131
+Control="CMSEdit",,{
+  Info=10,54,332,21,46H
+  Name="CLNT_CODE"
+  Prompt="Client Code (QBE)"
+  ForeColor=0
+  BackColor=C0C0C0H
+  Font="MS Sans Serif",11,1,0
+  Border=NO_BORDER
+  UsAc=7FFFH
+  UsPm=D4FH
+  UsCh=0
+  PAlignment=2
+  PromptWidth=116
+  MaxChars=-1
+  EditBorder=8
+  EditFont="MS Sans Serif",11,0,0
+  EBackColor=FFFFFFH
+  DataType=0
+  Lookup="_HBM_CLIENT","CLIENT_CODE"
+}
+Control="CMSPush",,{
+  Info=173,80,80,38,4000001H
+  Name="OK"
+  UsAc=7FFFH
+  UsPm=1FH
+  UsCh=0
+}
+Control="CMSPush",,{
+  Info=263,80,80,38,4000001H
+  Name="CANCEL"
+  UsAc=7FFFH
+  UsPm=1FH
+  UsCh=0
+}
+Control="CMSText",,{
+  Info=11,13,331,35,0
+  Prompt="Static Text"
+  ForeColor=0
+  BackColor=C0C0C0H
+  Font="MS Sans Serif",11,1,0
+  Border=NO_BORDER
+  UsAc=7FFFH
+  UsPm=0
+  UsCh=0
+  Value="Jackets & Folders attached to Client and All Matters (not attached to any submatters)"
+}

@@ -1,0 +1,250 @@
+{DRAFT OFF}
+Filename:	LEDES98BI.TXT
+Purpose: 	Ledes (Legal Electronic Data Exchange Standard) 1998B Electronic Billing 
+
+Modification Log:
+Date		Init		Decription
+8/13/99		jmo		Initial version
+9/30/99		jmo		Corrected for credit application
+10/01/99	jmo		Disallow billers to suppress printing time or disbursements
+				when the to bill amount <> 0.00
+
+User Variables:
+
+{_DATE_OUTPUT = 'ANSI_CS-'}
+{% Get start and end dates for the invoice}
+
+{IF from_time_date < from_disb_date}
+	{bill_start_date = from_time_date}
+{ELSE}	
+	{bill_start_date = from_disb_date}
+{END IF}
+{IF to_time_date > to_disb_date}
+	{bill_end_date = to_time_date}
+{ELSE}	
+	{bill_end_date = to_disb_date}
+
+{END IF}
+
+{% my_output_path = _path_work}
+{% IF SUBSTR(my_output_path, LENGTH(my_output_path), 1) != '\'}
+	{% my_output_path = my_output_path + '\'}
+{% END IF}
+The LEDES "Version Header Record" LEDES1998B
+
+{DRAFT ON}
+{CREATE DOCUMENT "C:\TEMP\"  + "SWISS" + NUM_TO_TEXT(BILL_NUMBER) + ".txt"}LEDES1998B[]
+{%
+The following section generates the Field Header Row
+}INVOICE_DATE|INVOICE_NUMBER|CLIENT_ID|LAW_FIRM_MATTER_ID|INVOICE_TOTAL|BILLING_START_DATE|BILLING_END_DATE|INVOICE_DESCRIPTION|LINE_ITEM_NUMBER|EXP/FEE/INV_ADJ_TYPE|LINE_ITEM_NUMBER_OF_UNITS|LINE_ITEM_ADJUSTMENT_AMOUNT|LINE_ITEM_TOTAL|LINE_ITEM_DATE|LINE_ITEM_TASK_CODE|LINE_ITEM_EXPENSE_CODE|LINE_ITEM_ACTIVITY_CODE|TIMEKEEPER_ID|LINE_ITEM_DESCRIPTION|LAW_FIRM_ID|LINE_ITEM_UNIT_COST|TIMEKEEPER_NAME|TIMEKEEPER_CLASSIFICATION|CLIENT_MATTER_ID[]
+{%exclude t_prt = 'Y' OR 
+The following section generates Time Rows
+}{REPEAT matter_info}{REPEAT TIME_INFO WHERE t_matterID = m_id AND 
+(t_amt <> 0.00) ORDER BY t_date, t_id OPTIMIZE t_narrative}
+{DRAFT OFF}
+
+{IF NOT EMPTY(t_tkpr_last)}
+{my_tkpr_name = SUBSTR(t_tkpr_last+", "+t_tkpr_first,1,30)}
+{ELSE}
+{my_tkpr_name =''}
+{END IF}
+
+{IF NOT EMPTY(t_client_task)}
+{my_client_task = t_client_task}
+{ELSE}
+{my_client_task =110}
+{END IF}
+
+dim(_my_activity) as NUM
+
+{IF NOT EMPTY(t_activity)}
+{_my_activity = TEXT_TO_NUM(t_activity)}
+{ELSE}
+{_my_activity=110}
+{END IF}
+
+{IF _my_activity >110}
+{my_activity = 110}
+{ELSE}
+{my_activity = _my_activity}
+{END IF}
+
+{DRAFT ON}{%
+Invoice Date               ==> }{bill_date}|{%
+
+Invoice Number             ==> }{bill_number}|{%
+
+Client ID                  ==> }Swiss Re|{%
+
+Law Firm Matter ID         ==> }{m_code}|{%
+
+Invoice Total              ==> }{FORMAT(bill_amount - my_credit_application,"D2")}|{%
+
+Billing Start Date         ==> }{my_start_date}|{%
+
+Billing End Date           ==> }{my_end_date}|{%
+
+Invoice Description         ==> }{bill_narrative}|{%
+
+Line Item Number            ==> }{t_ID}|{%
+
+Exp/Fee/Inv Adj Type        ==> }F|{%
+
+Line Item Number Of Units   ==> }{t_billed_billed_Hrs}|{%
+
+Line Item Adjustment Amount ==> }{FORMAT(t_amt - t_billed_tobill_amt,"D2")}|{%
+
+Line Item Total             ==> }{FORMAT(t_Amt,"D2")}|{%
+
+Line Item Date              ==> }{t_date}|{%
+
+Line Item Task Code         ==> }L{my_client_task}|{%
+
+Line Item Expense Code      ==> }|{%
+
+Line Item Activity Code     ==> }A{my_activity}|{%
+
+Timekeeper Id               ==> }{t_tkpr}|{%
+
+Line Item Description       ==> }{t_narrative}|{%
+
+Law Firm ID                 ==> }RT121975544|{%
+
+Line Item Unit Cost         ==> }{FORMAT(t_rate, "D2")}|{%
+
+Timekeeper Name             ==> }{my_tkpr_Name}|{%
+
+Timekeeper Classification   ==> }{IF t_Tkpr_Rank = 10}{%
+				}PT{%
+				}{ELSE IF t_Tkpr_Rank = 15}{%
+				}OC{%
+				}{ELSE IF t_Tkpr_Rank = 20}{%
+				}AS{%
+				}{ELSE IF t_Tkpr_Rank = 30 OR t_Tkpr_Rank =40 OR t_Tkpr_Rank =50}{%
+				}AS{%
+				}{ELSE}{%
+				}PL{%
+				}{END IF}|{%
+
+Client Matter ID           ==> }{m_Claim_Number_desc}[]
+{END REPEAT}{%
+
+
+The following section generates Disbursement Rows
+
+}{REPEAT DISBURSEMENT_INFO WHERE d_matterID = m_id and (d_prt = 'Y' OR d_amt <> 0.00)
+ORDER BY d_date OPTIMIZE d_narrative}
+{DRAFT OFF}
+{my_Dtkpr_name = SUBSTR(d_tkpr_last+", "+d_tkpr_first,1,30)}}
+
+{DRAFT ON}{%
+Invoice Date               ==> }{bill_date}|{%
+
+Invoice Number             ==> }{bill_number}|{%
+
+
+Client ID                  ==> }Swiss Re|{%
+
+Law Firm Matter ID         ==> }{m_code}|{%
+
+Invoice Total              ==> }{bill_amount - my_credit_application,2}|{%
+
+Billing Start Date         ==> }{my_start_date}|{%
+
+Billing End Date           ==> }{my_end_date}|{%
+
+Invoice Description         ==> }{bill_narrative}|{%
+
+Line Item Number            ==> }{d_ID}|{%
+
+Exp/Fee/Inv Adj Type        ==> }E|{%
+
+Line Item Number Of Units   ==> }{IF d_qty=0 and d_amt<>0}{%
+				}{FORMAT(1,"D2")}{%
+				}{ELSE}{%
+				}{FORMAT(d_qty,"D2")}{%
+				}{END IF}|{%
+
+Line Item Adjustment Amount ==> }{FORMAT(d_amt-d_bamt,"D2")}|{%
+
+Line Item Total             ==> }{FORMAT(d_amt,"D2")}|{%
+
+Line Item Date              ==> }{d_date}|{%
+
+Line Item Task Code         ==> }|{%
+
+Line Item Expense Code      ==> }{d_client_cost}|{%
+
+Line Item Activity Code     ==> }|{%
+
+Timekeeper Id               ==> }{d_tkpr}|{%
+
+Line Item Description       ==> }{d_client_cost_desc+" "+d_narrative}|{%
+
+Law Firm ID                 ==> }ABN 45 530 630 331|{%
+
+Line Item Unit Cost         ==> }{IF D_Qty = 0}{%
+				}{FORMAT(D_Amt,"D2")}{%
+				}{ELSE}{%
+				}{FORMAT(D_Amt/D_Qty,"D2")}{%
+				}{END IF}|{%
+
+Timekeeper Name             ==>}{my_Dtkpr_name}|{%
+
+Timekeeper Classification   ==> }|{% 
+
+Client Matter ID           ==> }{m_Claim_Number_desc}[]
+{END REPEAT}{END REPEAT}{%
+
+The following section will create an adjustment row Exp/Fee/Inv Adj Type = 'IE'.  This row will aggregate any charges or adjustments that effect the bill amount and are not directly related to time and disbursements.
+
+}{IF (p_bill_fees + p_bill_disb) <> bill_amount - my_credit_application
+}{%
+Invoice Date               ==> }{bill_date}|{%
+
+Invoice Number             ==> }{bill_number}|{%
+
+Client ID                  ==> }Swiss Re|{%
+
+Law Firm Matter ID         ==> }{m_code}|{%
+
+Invoice Total              ==> }{bill_amount- my_credit_application,2}|{%
+
+Billing Start Date         ==> }{my_start_date}|{%
+
+Billing End Date           ==> }{my_end_date}|{%
+
+Invoice Description         ==> }{bill_narrative}|{%
+
+Line Item Number            ==> }-9999|{%
+
+Exp/Fee/Inv Adj Type        ==> }IE|{%
+
+Line Item Number Of Units   ==> }{FORMAT(1,"D2")}|{%
+
+Line Item Adjustment Amount ==> }0|{%
+
+Line Item Total             ==> }{FORMAT((bill_amount- my_credit_application)-(p_bill_fees+p_bill_disb),"D2")}|{%
+
+Line Item Date              ==> }{bill_date-1}|{%
+
+Line Item Task Code         ==> }|{%
+
+Line Item Expense Code      ==> }|{%
+
+Line Item Activity Code     ==> }|{%
+
+Timekeeper Id               ==> }|{%
+
+Line Item Description       ==> }Aggregate bill adjustment|{%
+
+Law Firm ID                 ==> }R121975544|{%
+
+Line Item Unit Cost         ==> }{FORMAT((bill_amount- my_credit_application)-(p_bill_fees+p_bill_disb),"D2")}|{%
+
+Timekeeper Name             ==>}|{%
+
+Timekeeper Classification   ==> }|{% 
+
+Client Matter ID           ==> }{m_Claim_Number_desc}[]
+{END IF}

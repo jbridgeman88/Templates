@@ -1,0 +1,101 @@
+{\rtf1\ansi\ansicpg1252\uc1 \deff0\deflang1033\deflangfe1033{\fonttbl{\f0\froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f35\froman\fcharset238\fprq2 Times New Roman CE;}{\f36\froman\fcharset204\fprq2 Times New Roman Cyr;}
+{\f38\froman\fcharset161\fprq2 Times New Roman Greek;}{\f39\froman\fcharset162\fprq2 Times New Roman Tur;}{\f40\froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\f41\froman\fcharset178\fprq2 Times New Roman (Arabic);}
+{\f42\froman\fcharset186\fprq2 Times New Roman Baltic;}}{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;
+\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;\red255\green255\blue255;}{\stylesheet{
+\ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 \snext0 Normal;}{\*\cs10 \additive Default Paragraph Font;}}{\info{\title \{VIEW cl_letter WHERE let_event_uno = 119\}}
+{\author Solution 6 (Canada) Inc.}{\operator M_ANKER}{\creatim\yr2001\mo8\dy19\hr23\min25}{\revtim\yr2001\mo8\dy30\hr17\min33}{\version114}{\edmins495}{\nofpages2}{\nofwords333}{\nofchars1899}{\*\company PCDOCS Group International Inc.}{\nofcharsws0}
+{\vern8269}}\widowctrl\ftnbj\aenddoc\noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\formshade\horzdoc\dghspace180\dgvspace180\dghorigin1701\dgvorigin1984\dghshow0\dgvshow0
+\jexpand\viewkind1\viewscale100\pgbrdrhead\pgbrdrfoot\nolnhtadjtbl \fet0\sectd \linex0\endnhere\sectdefaultcl {\*\pnseclvl1\pnucrm\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl3
+\pndec\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang{\pntxta )}}{\*\pnseclvl5\pndec\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl6\pnlcltr\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}
+{\*\pnseclvl7\pnlcrm\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl8\pnlcltr\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl9\pnlcrm\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}\pard\plain 
+\ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \fs22\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 {\{_date_output = 'US_X'\}
+\par \{REPEAT let_trans_detail WHERE td_status_flg = \lquote P\rquote  AND tdbp_ar_status = 'O'  ORDER BY tdp_client_code, tdb_bill_date, tdb_bill_num\}\{DRAFT OFF\}
+\par \{IF ON_FIRST_UNIQUE_ROW(1)\}\{rem on first row for payor}{\fs24 \}\{DRAFT ON\}
+\par }{\{total_30 = 0,total_60 = 0,total_90=0,total_91=0,total_grand=0\}
+\par \{one_bill = 'Y', cur_sym = tdb_pcur_symbol, one_sym='Y'\}
+\par \{current_bill = tdb_bill_num\}
+\par 
+\par \{let_contact_first\} \{IFF(EMPTY(let_contact_middle),'',let_contact_middle + ' ')\}\{let_contact_last\}
+\par \{IF EMPTY(let_client_name)\}
+\par \{tdp_client_name\}\{ELSE\}\{let_client_name\}
+\par \{END IF\}
+\par \{let_address1\}
+\par \{let_address2\}
+\par \{let_address3\}
+\par \{let_address4\}
+\par \{let_add_city\}\{IFF(EMPTY(let_add_city),'',',')\} \{let_add_state_code\}  \{let_add_zip_code\}
+\par 
+\par }\pard \qr \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 {\{DATE_TO_TEXT(DATE(),'STD_C')\}
+\par }\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 {
+\par Dear Sir or Madam,
+\par 
+\par }{\b\ul Outstanding Invoices as at \{DATE_TO_TEXT(DATE(),'STD_C')\}
+\par 
+\par 
+\par }\trowd \trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\pard 
+\ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{END IF\}\{DRAFT ON\}\{IF ON_FIRST_UNIQUE_ROW(1)\}\cell }\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\row }\trowd 
+\trgaph108\trleft-108\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1188 \cellx1080\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth990 \cellx2070\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth720 \cellx2790\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1080 \cellx3870\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx5040\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx6210\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx7380\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1530 \cellx8910\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\b\ul Bill Date\cell Bill No\cell }\pard 
+\qc \li0\ri0\keepn\widctlpar\intbl\aspalpha\aspnum\faauto\outlinelevel3\adjustright\rin0\lin0 {\b\ul Curr\cell }\pard \qr \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\b\ul 0-30\cell 31-60\cell 61-90\cell Over 90\cell Total\cell 
+}\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd \trgaph108\trleft-108\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth1188 \cellx1080\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth990 \cellx2070\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth720 \cellx2790\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1080 \cellx3870\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx5040\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx6210\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx7380\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1530 \cellx8910\row }\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\pard 
+\ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{END IF\}\{IF current_bill != tdb_bill_num\}\{one_bill = 'N'\}\{END IF\}\cell }\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\row }\pard 
+\ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{IF ON_LAST_UNIQUE_ROW(3)\}\cell }\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\row }\trowd 
+\trgaph108\trleft-108\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1188 \cellx1080\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth990 \cellx2070\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth720 \cellx2790\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1080 \cellx3870\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx5040\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx6210\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx7380\clvertalt\clbrdrt\brdrnone \clbrdrl
+\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1530 \cellx8910\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{tdb_bill_date\}\cell \{tdb_bill_num\}\cell }\pard 
+\qc \li0\ri0\keepn\widctlpar\intbl\aspalpha\aspnum\faauto\outlinelevel3\adjustright\rin0\lin0 {\{tdb_pcur_symbol\}\{IF cur_sym != tdb_pcur_symbol\}\{one_sym='N'\}\{END IF\}\cell }\pard 
+\qr \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{IF DATE() - tdb_bill_date <= 30\} \{IFF(let_trans_col_tran_level = 'M', COMMA(tdbm_pcur_total_ar),COMMA(tdbp_pcur_total_ar))\}\{total_30=total_30 + 
+IFF(let_trans_col_tran_level = 'M', tdbm_pcur_total_ar,tdbp_pcur_total_ar)\}\{ELSE\}0.00\{END IF\}\cell \{IF DATE() - tdb_bill_date > 30 AND DATE()-tdb_bill_date <=60\} \{IFF(let_trans_col_tran_level = 'M', COMMA(tdbm_pcur_total_ar),COMMA(tdbp
+_pcur_total_ar))\}\{total_60=total_60 + IFF(let_trans_col_tran_level = 'M', tdbm_pcur_total_ar,tdbp_pcur_total_ar)\}\{ELSE\}0.00\{END IF\}\cell \{IF DATE() - tdb_bill_date > 60 AND DATE()-tdb_bill_date <=90\} \{
+IFF(let_trans_col_tran_level = 'M', COMMA(tdbm_pcur_total_ar),COMMA(tdbp_pcur_total_ar))\}\{total_90=total_90 + IFF(let_trans_col_tran_level = 'M', tdbm_pcur_total_ar,tdbp_pcur_total_ar)\}\{ELSE\}0.00\{END IF\}\cell \{IF DATE() - tdb_bill_date > 90\} \{
+IFF(let_trans_col_tran_level = 'M', COMMA(tdbm_pcur_total_ar),COMMA(tdbp_pcur_total_ar))\}\{total_91=total_91 + IFF(let_trans_col_tran_level = 'M', tdbm_pcur_total_ar,tdbp_pcur_total_ar)\}\{ELSE\}0.00\{END IF\}\cell \{
+IFF(let_trans_col_tran_level = 'M', COMMA(tdbm_pcur_total_ar),COMMA(tdbp_pcur_total_ar))\}\{total_grand=total_grand + IFF(let_trans_col_tran_level = 'M', tdbm_pcur_total_ar,tdbp_pcur_total_ar)\}\cell }\pard 
+\ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd \trgaph108\trleft-108\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth1188 \cellx1080\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth990 \cellx2070\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth720 \cellx2790\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1080 \cellx3870\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth1170 \cellx5040\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx6210\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth1170 \cellx7380\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1530 \cellx8910\row }\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\pard 
+\ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{END IF\}\{IF ON_LAST_UNIQUE_ROW(1) AND one_sym = 'Y'\}\cell }\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\row }\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth2178 \cellx2070\clvertalt\clbrdrt\brdrnone 
+\clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth720 \cellx2790\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1080 \cellx3870\clvertalt\clbrdrt\brdrnone 
+\clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx5040\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx6210\clvertalt\clbrdrt\brdrnone 
+\clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx7380\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1530 \cellx8910\pard 
+\ql \li0\ri0\keepn\widctlpar\intbl\aspalpha\aspnum\faauto\outlinelevel4\adjustright\rin0\lin0 {\b TOTAL\cell }\pard \qc \li0\ri0\keepn\widctlpar\intbl\aspalpha\aspnum\faauto\outlinelevel3\adjustright\rin0\lin0 {\b \{tdb_pcur_symbol\}}{\cell }\pard 
+\qr \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\b \{COMMA(total_30,2)\}}{\cell }{\b \{COMMA(total_60,2)\}}{\cell }{\b \{COMMA(total_90,2)\}}{\cell }{\b \{COMMA(total_91,2)\}}{\cell }{\b \{COMMA(total_grand,2)\}}{\cell }\pard 
+\ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd \trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth2178 \cellx2070\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth720 \cellx2790\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth1080 \cellx3870\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx5040\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx6210\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth1170 \cellx7380\clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr
+\brdrnone \cltxlrtb\clftsWidth3\clwWidth1530 \cellx8910\row }\trowd \trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\{END IF\}}{\b \cell }\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 {\trowd 
+\trgaph108\trleft-108\trkeep\trftsWidth3\trwWidth9018\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3 \clvertalt\clbrdrt\brdrnone \clbrdrl\brdrnone \clbrdrb\brdrnone \clbrdrr\brdrnone \cltxlrtb\clftsWidth3\clwWidth9018 \cellx8910\row }\pard 
+\ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 {\{DRAFT OFF\}\{IF ON_LAST_UNIQUE_ROW(1)\}\{DRAFT ON\}
+\par The above statement detail our bill\{IF one_bill = 'N'\}s\{END IF\} which \{IF one_bill = 'N'\}are\{ELSE\}is\{END IF\} unpaid. Please contact our Credit Control Department on the above phone number if you require any further information.
+\par 
+\par In absence of any query, I would be grateful for your remittance in the near future.
+\par 
+\par Yours faithfully,
+\par 
+\par 
+\par 
+\par 
+\par 
+\par Credit Controller \{REM IF NOT ON_LAST_VIEW_ROW()\}
+\par \{'[Hpg]'\}
+\par \{REM END IF\}\{END IF\}\{END REPEAT\}
+\par }}

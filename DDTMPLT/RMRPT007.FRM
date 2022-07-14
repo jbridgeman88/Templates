@@ -1,0 +1,52 @@
+Info=144,100,425,242,2905H
+Name="Records Management"
+Prompt="Records Management Final Disposition Worksheet"
+ForeColor=0
+BackColor=C0C0C0H
+UsAc=7FFFH
+UsPm=3A16H
+UsCh=0
+Version=3
+ClientSize=415,213
+Control="CMSRadioGroup",,{
+  Info=11,17,389,139,0
+  Name="Level"
+  Prompt="Which Final Disposition Worksheet would you like?"
+  ForeColor=0
+  BackColor=C0C0C0H
+  Font="MS Sans Serif",11,1,0
+  Border=15
+  UsAc=7FFFH
+  UsPm=1FH
+  UsCh=0
+  Value="J"
+  Buttons="B Box Final Disposition Worksheet (Not implemented);J Jacket Final Disposition Worksheet;F Folder Final Disposition Worksheet;N Insert Final Disposition Worksheet (Not Implemented);T Item Final Disposition Worksheet (Not implemented)"
+}
+Control="CMSRadioGroup",,{
+  Info=10,165,210,41,0
+  Name="Sum_or_Det"
+  Prompt="Summary or Detail Worksheet?"
+  ForeColor=0
+  BackColor=C0C0C0H
+  Font="MS Sans Serif",11,1,0
+  Border=15
+  UsAc=7FFFH
+  UsPm=1FH
+  UsCh=0
+  Value="S"
+  Buttons="S Summary;D Detail"
+}
+Control="CMSPush",,{
+  Info=230,165,80,38,4000001H
+  Name="OK"
+  UsAc=7FFFH
+  UsPm=1FH
+  UsCh=0
+}
+Control="CMSPush",,{
+  Info=320,165,80,38,4000001H
+  Name="CANCEL"
+  UsAc=7FFFH
+  UsPm=1FH
+  UsCh=0
+}

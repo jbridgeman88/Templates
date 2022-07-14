@@ -1,0 +1,474 @@
+{DRAFT OFF}
+Filename:	LEDES2_0.TXT
+Purpose: 	SAMPLE STILL TO BE VERIFIED - Ledes (Legal Electronic Data Exchange Standard) Version 2.0 Electronic Billing
+
+
+Modification Log:
+Date		Init		Decription
+2007/08/09	mla		Initial version
+
+User Variables:
+
+{_DATE_OUTPUT = 'ANSI_CS-'}
+{u_file_item_nbr = 1}
+
+{% Get start and end dates for the invoice}
+
+{IF from_time_date < from_disb_date}
+	{bill_start_date = from_time_date}
+{ELSE}	
+	{bill_start_date = from_disb_date}
+{END IF}
+{IF to_time_date > to_disb_date}
+	{bill_end_date = to_time_date}
+{ELSE}	
+	{bill_end_date = to_disb_date}
+{END IF}
+{if empty(bill_start_date)}{bill_start_date= MIN(time_info, "t_date")}{end if}
+{if empty(bill_start_date)}{bill_start_date= MIN(disbursement_info, "d_date")}{end if}
+
+{%
+First Output the header for the XML file, indicating the xml version, doc type etc.
+}
+{DRAFT ON}
+<?xml version="1.0" encoding="utf-8" ?> 
+<ledesxml xmlns="http://www.ledes.org/ledes20.xsd">
+{%
+@ FIRM segment
+}
+<firm>
+<lf_vendor_id>R121975544</lf_vendor_id>
+<lf_id>R121975544</lf_id>{% This field is for a Firm ID if you have one. Optional field}
+<lf_name>{XML_ENCODE(_FIRM_NAME)}</lf_name>
+<lf_address>
+<address_1>30th Floor 360 Main Street</address_1>
+<address_2></address_2>
+<city>Winnipeg</city>
+<state_province>MB</state_province>
+<zip_postal_code>R3C 4G1</zip_postal_code>
+<country>Canada</country>
+<phone>204-957-0050</phone>
+</lf_address>
+<lf_billing_contact>
+<contact_lname>{XML_ENCODE(p_ebill_offc_empl_last_name)}</contact_lname>
+<contact_fname>{XML_ENCODE(p_ebill_offc_empl_first_name)}</contact_fname>
+<contact_email>{XML_ENCODE(p_ebill_offc_empl_email)}</contact_email>
+</lf_billing_contact>
+<source_app>ADERANT Expert</source_app>
+<app_version>7.5</app_version>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+@CLIENT Segment
+}
+<client>
+<cl_id>09902 - HEAD OFFICE ACCOUNTING DEPARTMENT</cl_id>
+<cl_lf_id>R121975544</cl_lf_id>
+<cl_name>CIBC</cl_name>
+<cl_address>
+<address_1>{XML_ENCODE(p_address1)}</address_1>
+<address_2>{XML_ENCODE(p_address2)}</address_2>
+<city>{XML_ENCODE(p_city)}</city>
+<state_province>{p_state_prov_code}</state_province>
+<zip_postal_code>{XML_ENCODE(p_zip_code)}</zip_postal_code>
+<country>{XML_ENCODE(p_country_name)}</country>
+<phone>{XML_ENCODE(p_phone)}</phone>
+</cl_address>
+{REPEAT PAYOR_BILL_GRP_EBILL_CONTACTS WHERE p_bgrp_ebill_contact_ebill_role = "LEDES"}
+{IF ON_FIRST_ROW()}
+<client_contact>
+<contact_lname>{XML_ENCODE(p_bgrp_ebill_contact_last)}</contact_lname>
+<contact_fname>{XML_ENCODE(p_bgrp_ebill_contact_first)}</contact_fname>
+<contact_id>{p_bgrp_ebill_contact_name_uno}</contact_id>
+<contact_phone>{XML_ENCODE(p_bgrp_ebill_contact_phone)}</contact_phone>
+<contact_fax>{XML_ENCODE(p_bgrp_ebill_contact_fax)}</contact_fax>
+<contact_email>{XML_ENCODE(p_bgrp_ebill_contact_email)}</contact_email>
+</client_contact>
+{END IF}
+{END REPEAT}{% PAYOR_BILL_GRP_EBILL_CONTACTS}
+<cl_tax_id></cl_tax_id>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+
+@INVOICE Segment
+
+}
+<invoice>
+<inv_id>{bill_number}</inv_id>
+<inv_date>{bill_date}</inv_date>
+{% optional <inv_due_date></inv_due_date>}
+<inv_currency>CAD</inv_currency>
+<inv_start_date>{bill_start_date}</inv_start_date>
+<inv_end_date>{bill_end_date}</inv_end_date>
+<inv_desc>{XML_ENCODE(bill_narrative)}</inv_desc>
+{% optional <inv_payment_terms></inv_payment_terms>}
+<inv_total_tax>{p_bill_tax}</inv_total_tax>
+{% optional <inv_total_tax_other_iso></inv_total_tax_other_iso>}
+<inv_total_net_due>{p_bill_total}</inv_total_net_due>{% ***** Need to subtract credit applications from this amt?}
+<inv_total_net_due_other_iso>0.00</inv_total_net_due_other_iso>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+
+@MATTER Segment
+
+}
+{REPEAT MATTER_INFO}{xx_netfee=0}{xx_netdisb=0}
+<matter>
+<cl_matter_id>{XML_ENCODE(m_claim_number_desc)}</cl_matter_id>
+<lf_matter_id>{m_code}</lf_matter_id>
+<matter_name>{XML_ENCODE(m_name)}</matter_name>
+<matter_desc>{XML_ENCODE(m_desc)}</matter_desc>
+<lf_managing_contact>
+<contact_lname>{XML_ENCODE(m_resp_tkpr_last)}</contact_lname>
+<contact_fname>{XML_ENCODE(m_resp_tkpr_first)}</contact_fname>
+<contact_id>{m_resp_tkpr_name_uno}</contact_id>
+<contact_phone>{XML_ENCODE(m_resp_tkpr_phone)}</contact_phone>
+<contact_fax>{XML_ENCODE(m_resp_tkpr_fax)}</contact_fax>
+<contact_email>{XML_ENCODE(m_resp_tkpr_email)}</contact_email>
+</lf_managing_contact>
+<lf_contact>
+<contact_lname>{XML_ENCODE(m_bill_tkpr_last)}</contact_lname>
+<contact_fname>{XML_ENCODE(m_bill_tkpr_first)}</contact_fname>
+<contact_id>{m_bill_tkpr_name_uno}</contact_id>
+<contact_phone>{XML_ENCODE(m_bill_tkpr_phone)}</contact_phone>
+<contact_fax>{XML_ENCODE(m_bill_tkpr_fax)}</contact_fax>
+<contact_email>{XML_ENCODE(m_bill_tkpr_email)}</contact_email>
+</lf_contact>
+{% optional <matter_billing_type></matter_billing_type>}
+<matter_final_bill>{m_final_bill}</matter_final_bill>
+<matter_total_detail_fees>{IF bill_type = 'S'}{p_bill_fees}{ELSE}{m_bill_fees}{END IF}</matter_total_detail_fees>
+<matter_total_detail_exp>{IF bill_type = 'S'}{p_bill_disb}{ELSE}{m_bill_disb}{END IF}</matter_total_detail_exp>
+<matter_disc_credit_fees>0.00</matter_disc_credit_fees>
+<matter_disc_credit_exp>0.00</matter_disc_credit_exp>
+<matter_disc_cred_total>{IF bill_type = 'S'}{p_bill_premdisc}{ELSE}{m_bill_premdisc}{END IF}</matter_disc_cred_total>
+<matter_perc_shar_fees>{IF bill_type = 'S'}{ROUND(p_bill_fees/m_bill_fees,2)}{ELSE}1.0{END IF}</matter_perc_shar_fees>
+<matter_perc_shar_exp>{IF bill_type = 'S'}{ROUND(p_bill_disb/m_bill_disb,2)}{ELSE}1.0{END IF}</matter_perc_shar_exp>
+<matter_tax_on_fees>{IF bill_type = 'S'}{(SUM(TAX_INFO,"tax_fees","m_id = tax_matterid"))*(p_bill_fees/m_bill_fees)}{ELSE}{SUM(TAX_INFO,"tax_fees","m_id = tax_matterid")}{END IF}</matter_tax_on_fees>
+<matter_tax_on_exp>{IF bill_type = 'S'}{(SUM(TAX_INFO,"tax_hard + tax_soft","m_id= tax_matterid"))*(p_bill_disb/m_bill_disb)}{ELSE}{SUM(TAX_INFO,"tax_hard+tax_soft","m_id = tax_matterid")}{END IF}</matter_tax_on_exp>
+<matter_net_fees>{xx_netfee=m_bill_fees}{xx_netfee=xx_netfee+ SUM(TAX_INFO,"tax_fees","m_id = tax_matterid")}{xx_netfee}</matter_net_fees>
+<matter_net_exp>{xx_netdisb=m_bill_disb}{xx_netdisb=xx_netdisb+SUM(TAX_INFO,"tax_hard+tax_soft","m_id = tax_matterid")}{xx_netdisb}</matter_net_exp>
+<matter_total_due>{m_bill_fees+m_bill_disb+m_bill_tax}</matter_total_due>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+
+@TAX_SUMMARY Segment - Matter level
+
+}
+{% Two repeats in this section - first for Fee Rates and then for Disb Rates}
+{REPEAT TAX_INFO GROUP BY tax_jurisdiction 
+aggregate sum(tax_fees),sum(tax_hard+tax_soft) order by tax_jurisdiction}
+<tax_summary>
+<tx_id>{tax_jurisdiction}</tx_id>
+<tax_total_detail_fees>{m_bill_fees}</tax_total_detail_fees>
+<total_tax_on_fees>{aggregate_value(1)}{%tax_fees}</total_tax_on_fees>
+<tax_total_detail_expense>{tax_hard_taxable+tax_soft_taxable}</tax_total_detail_expense>
+<total_tax_on_expense>{aggregate_value(2)}{%tax_hard+tax_soft}</total_tax_on_expense>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax_summary>
+{END REPEAT}{% TAX_INFO}
+{%
+
+@MATTER_DISC_CRED Segment
+
+
+{% FIRST get Prem Discount Credits - then will get Other credits from MATTER_CREDIT INFO}
+{% 
+    MIDB Matter invoice discounted bill
+}
+{IF m_bill_premdisc < 0 AND m_auto_premdisc <> 0}
+<matter_disc_cred>
+<disc_cred>MIDB</disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type>Percent</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent>{m_auto_premdisc}</discount_percent>
+<disc_cred_amount>{m_bill_premdisc}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+ TAX_MATTER_DISC_CRED Segment
+}
+{REPEAT tax_info GROUP BY tax_code WHERE tax_premdisc <> 0}
+<tax_matter_disc_cred>
+<tx_id>{tax_code}</tx_id>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax_matter_disc_cred>
+{END REPEAT}{% TAX_INFO}
+</matter_disc_cred>
+{END IF}
+{% 
+    MIA Matter invoice Adjustment
+}
+{IF m_bill_premdisc < 0 AND m_auto_premdisc = 0}
+<matter_disc_cred>
+<disc_cred>MIA</disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type>Flat</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent>0.00</discount_percent>
+<disc_cred_amount>{m_bill_premdisc}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+ TAX_MATTER_DISC_CRED Segment
+}
+{REPEAT tax_info GROUP BY tax_code WHERE tax_premdisc <> 0}
+<tax_matter_disc_cred>
+<tx_id>{tax_code}</tx_id>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax_matter_disc_cred>
+{END REPEAT}{% TAX_INFO}
+</matter_disc_cred>
+{END IF}
+{% 
+      MIB Matter a bonus to be paid to the law firm
+
+}
+{IF m_bill_premdisc > 0}
+<matter_disc_cred>
+<disc_cred>MIB</disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type>{IF m_auto_premdisc <> 0}Percent{ELSE}Flat{END IF}</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent>{m_auto_premdisc}</discount_percent>
+<disc_cred_amount>{m_bill_premdisc}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%
+ TAX_MATTER_DISC_CRED Segment
+}
+{REPEAT tax_info GROUP BY tax_code WHERE tax_premdisc <> 0}
+<tax_matter_disc_cred>
+<tx_id>{tax_jurisdiction}</tx_id>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax_matter_disc_cred>
+{END REPEAT}{% TAX_INFO}
+</matter_disc_cred>
+{END IF}
+{% 
+      MIDRH Matter/Invoice discounted Hourly rate - NOT Adding this section for Sample because not sure considered credit in ADERANT Expert
+
+}
+{DRAFT OFF}
+{IF m_fee_rate_set_uno <> 0}
+<matter_disc_cred>
+<disc_cred>MIDRH</disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type></disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{m_bill_premdisc}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+{DRAFT ON}
+{% 
+      MICF Matter/Invoice Contingency Fee
+      If the sum of the TO_BILL fees is higher than the billed fees
+}
+{IF SUM(time_info,"t_pamt","m_id = t_matterid") > m_bill_fees }
+<matter_disc_cred>
+<disc_cred>MICR</disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type></disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{SUM(time_info,"t_pamt","m_id = t_matterid") - m_bill_fees}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+{% 
+    SECOND get Credits from matter credits
+}
+{REPEAT MATTER_CREDIT_INFO WHERE m_id = mc_matterid GROUP BY mc_matterid AGGREGATE SUM(mc_oadisb), SUM(mc_oafees),SUM(mc_progress),SUM(mc_retainer),SUM(mc_cash)}
+{IF AGGREGATE_VALUE(1) <> 0}
+<matter_disc_cred>
+<disc_cred>Other</disc_cred>
+<disc_cred_note>OA Disb</disc_cred_note>
+<disc_cred_type>Flat</disc_cred_type>
+<disc_cred_category>Exp</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{mc_oadisb}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+{IF AGGREGATE_VALUE(2) <> 0}
+<matter_disc_cred>
+<disc_cred>Other</disc_cred>
+<disc_cred_note>OA Fees</disc_cred_note>
+<disc_cred_type>Flat</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{mc_oafees}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+{IF AGGREGATE_VALUE(3) <> 0}
+<matter_disc_cred>
+<disc_cred>Other</disc_cred>
+<disc_cred_note>Progress</disc_cred_note>
+<disc_cred_type>Flat</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{mc_oafees}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+{IF AGGREGATE_VALUE(4) <> 0}
+<matter_disc_cred>
+<disc_cred>MIR</disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type>Flat</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{mc_retainer}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+{IF AGGREGATE_VALUE(5) <> 0}
+<matter_disc_cred>
+<disc_cred>Other</disc_cred>
+<disc_cred_note>Unapplied Cash</disc_cred_note>
+<disc_cred_type>Flat</disc_cred_type>
+<disc_cred_category>Fee</disc_cred_category>
+<discount_percent></discount_percent>
+<disc_cred_amount>{mc_cash}</disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</matter_disc_cred>
+{END IF}
+
+{END REPEAT}{% MATTER_CREDIT_INFO}
+}{%
+
+@TKSUM Segment
+
+}
+{REPEAT TIME_INFO WHERE m_id = t_matterid GROUP BY t_tkpr,t_tkpr_last, t_tkpr_first,t_rank_client_code,t_rate}
+{%IF ON_FIRST_ROW()}
+<tksum>
+{%END IF}
+<tk_id>{t_tkpr}</tk_id>
+<tk_lname>{XML_ENCODE(t_tkpr_last)}</tk_lname>
+<tk_fname>{XML_ENCODE(t_tkpr_first)}</tk_fname>
+<tk_level>{if t_rank=1000 or t_rank=1100 or t_rank=1200 or t_rank=1400}Partner{end if}{if t_rank=9000}Other{end if}{if t_rank=6000}Billing Administrator{end if}{if t_rank=4000}Paralegal{end if}{if t_rank=2000 or t_rank=2100 or t_rank=2200 or t_rank=2300 or t_rank=2400 or t_rank=2500}Associate{end if}</tk_level>
+<tk_rate>{t_rate}</tk_rate>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{%IF ON_LAST_ROW()}
+</tksum>
+{%END IF}
+{END REPEAT}
+{%
+
+@FEE Segment
+
+}
+{REPEAT TIME_INFO}
+{% Logic for working location}
+{IF t_taxable = 'Y'}
+{IF m_time_jurisdic_override = 'Y'}
+{u_time_location = m_jurisdiction}
+{ELSE}
+{u_time_location = t_location_jurisdiction}
+{END IF}
+{ELSE}
+{u_time_location = t_location}
+{END IF}
+<fee>
+<charge_date>{t_date}</charge_date>
+<tk_id>{t_tkpr}</tk_id>
+<tk_level>{if t_rank=1000 or t_rank=1100 or t_rank=1200 or t_rank=1400}Partner{end if}{if t_rank=9000}Other{end if}{if t_rank=6000}Billing Adminstrator{end if}{if t_rank=4000}Paralegal{end if}{if t_rank=2000 or t_rank=2100 or t_rank=2200 or t_rank=2300 or t_rank=2400 or t_rank=2500}Associate{end if}</tk_level>
+<fee_work_location>CA</fee_work_location>
+<charge_desc>{XML_ENCODE(t_narrative)}</charge_desc>
+<task_code>{t_client_task}</task_code>
+<task_activity>{t_activity}</task_activity>
+<charge_type>{IF t_amt >0 and t_hrs=0}F{ELSE}U{END IF}</charge_type>
+<units>{t_hrs}</units>
+<rate>{t_rate}</rate>
+<base_amount>{t_amt}</base_amount>
+<item_disc_cred_amount>0</item_disc_cred_amount>
+<total_amount>{t_amt}</total_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{% FEE_ITEM_DISC_CRED NOT TRACKED in ADERANT Expert - therefore this section is commented out
+<fee_item_disc_cred>
+<disc_cred></disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type></disc_cred_type>
+<discount_percent></discount_percent>
+<disc_cred_amount></disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</fee_item_disc_cred>
+}
+<tax_item_fee>
+<tx_id>{if t_taxable='Y'}{if not empty(t_location_jurisdiction)}{t_location_jurisdiction}{else}{m_jurisdiction}{end if}{end if}</tx_id>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax_item_fee>
+
+{%END IF}
+</fee>
+{%END IF}
+{END REPEAT}{% TIME_INFO}
+{%
+
+@EXPENSE Segment
+
+}
+{REPEAT DISBURSEMENT_INFO WHERE m_id = d_matterid}
+{% Logic for working location}{u_disb_location=''}
+{IF d_taxable = 'Y'}
+{IF m_disb_jurisdic_override = 'Y'}
+{u_disb_location = m_jurisdiction}
+{ELSE}
+{u_disb_location = d_location_jurisdiction}
+{END IF}
+{ELSE}
+{u_disb_location = d_location}
+{END IF}
+<expense>
+<charge_date>{d_date}</charge_date>
+<work_location>CA</work_location>
+<charge_desc>{XML_ENCODE(d_narrative)}</charge_desc>
+<expense_code>{d_client_cost}</expense_code>
+<charge_type>{IF d_has_unit_rate = 'Y'}U{ELSE}F{END IF}</charge_type>
+<units>{if d_has_unit_rate='Y'}{d_qty}{else}0{end if}</units>
+<rate>{if d_has_unit_rate='Y'}{ROUND(d_amt/d_qty,2)}{else}0{end if}</rate>
+<base_amount>{d_amt}</base_amount>
+<item_disc_cred_amount>0</item_disc_cred_amount>
+<total_amount>{d_amt}</total_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+{% 
+EXPENSE_ITEM_DISC_CRED IS NOT TRACKD in ADERANT Expert -therefore this section is commented out
+<expense_item_disc_cred>
+<disc_cred></disc_cred>
+<disc_cred_note></disc_cred_note>
+<disc_cred_type></disc_cred_type>
+<discount_percent></discount_percent>
+<disc_cred_amount></disc_cred_amount>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</expense_item_disc_cred>
+}
+<tax_item_expense>
+<tx_id>{if d_taxable='Y'}{if not empty(d_location_jurisdiction)}{d_location_jurisdiction}{else}{m_jurisdiction}{end if}{end if}</tx_id>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax_item_expense>
+</expense>
+{END REPEAT}
+</matter>
+{END REPEAT}
+</invoice>
+</client>
+</firm>
+{%
+@TAX Segment
+}
+{% Two repeats in this section - first for Fee Rates and then for Disb Rates}
+{REPEAT TAX_INFO GROUP BY tax_jurisdiction}
+<tax>
+<tx_id>{tax_jurisdiction}</tx_id>
+<tax_id_number>121975544</tax_id_number>
+<tax_type>TGMB &amp; PST MB</tax_type>
+<tax_rate_percent>0.13</tax_rate_percent>
+<taxing_jurisdiction>CA</taxing_jurisdiction>
+<file_item_nbr>{u_file_item_nbr}</file_item_nbr>{u_file_item_nbr = u_file_item_nbr+1}
+</tax>
+{END REPEAT}{% TAX_INFO}
+{% TAX_INFO}
+{%
+XML tag for end of the file
+}
+</ledesxml>
